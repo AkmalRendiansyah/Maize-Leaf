@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">MaizeLeaf</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="masuk">Masuk</string>
+    <string name="History">History</string>
+    <string name="title_welcome_page">Selamat datang di Maize Leaf!</string>
+    <string name="message_welcome_page">Temukan solusi terbaik untuk melindungi tanaman jagung Anda dari penyakit daun. Dengan Maize Leaf, hasil panen optimal kini dalam genggaman Anda!</string>
+
+    <string name="title_welcome_page1">Selamat Datang, Petani Cerdas!</string>
+    <string name="message_welcome_page1">Maize Leaf hadir untuk membantu Anda mengenali dan mengatasi penyakit pada daun tanaman jagung. Dukung produktivitas Anda dengan teknologi cerdas!</string>
+
+    <string name="title_welcome_page2">Mari Mulai Bersama Maize Leaf!</string>
+    <string name="message_welcome_page2">Tekan tombol di bawah untuk memulai analisis daun jagung Anda. Bersama Maize Leaf, langkah Anda hari ini menentukan panen yang lebih baik esok hari!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="permission_granted">Permintaan izin disetujui</string>
+    <string name="permission_not_granted">Permintaan izin ditolak</string>
+    <string name="error_capturing">Error capturing image: %1$s</string>
+    <string name="choose_again">Pilih Ulang</string>
+    <string name="retake">Ambil Ulang</string>
+    <string name="image_classifier_failed">Klasifikasi gambar gagal</string>
+    <string name="error_message">Terjadi kesalahan: %s</string>
+
+</resources>

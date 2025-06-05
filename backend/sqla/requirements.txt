@@ -1,0 +1,11 @@
+# Install Flask-Admin with required extras from the root of the repository
+flask
+flask-admin
+flask-sqlalchemy
+pymysql
+Flask-SQLAlchemy
+Flask-JWT-Extended
+sqlalchemy-utils
+arrow
+email-validator
+bcrypt
