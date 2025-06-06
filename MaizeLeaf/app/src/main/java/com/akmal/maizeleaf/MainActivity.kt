@@ -19,6 +19,7 @@ import com.akmal.maizeleaf.ui.camera.CameraActivity
 import com.akmal.maizeleaf.ui.history.HistoryFragment
 import com.akmal.maizeleaf.ui.home.HomeFragment
 import com.akmal.maizeleaf.ui.notifications.NotificationsFragment
+import com.akmal.maizeleaf.ui.profile.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,8 +55,8 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener { startCameraX() }
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.navigation_home -> {
-                    openFragment(HomeFragment())
+                R.id.navigation_profile -> {
+                    openFragment(ProfileFragment())
                     true
                 }
 

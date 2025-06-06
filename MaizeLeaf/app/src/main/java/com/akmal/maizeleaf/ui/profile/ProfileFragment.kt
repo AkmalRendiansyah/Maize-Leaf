@@ -1,22 +1,31 @@
-package com.akmal.maizeleaf.ui.home
+package com.akmal.maizeleaf.ui.profile
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.akmal.maizeleaf.R
 import com.akmal.maizeleaf.data.UserPreference
 import com.akmal.maizeleaf.data.dataStore
 import com.akmal.maizeleaf.databinding.FragmentHomeBinding
+import com.akmal.maizeleaf.databinding.FragmentProfileBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class HomeFragment : Fragment() {
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
 
-    private var _binding: FragmentHomeBinding? = null
+/**
+ * A simple [Fragment] subclass.
+ * Use the [ProfileFragment.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+class ProfileFragment : Fragment() {
+     private var _binding: FragmentProfileBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -27,7 +36,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         userPreference = UserPreference.getInstance(requireContext().dataStore)
         observeUserData()
         return binding.root

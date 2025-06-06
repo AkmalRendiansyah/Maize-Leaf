@@ -19,61 +19,92 @@ JWT_SECRET = "your_jwt_secret_key"  # Ganti dengan secret key yang aman
 # Fungsi untuk memverifikasi token JWT registrasi
 
 
+from flask import request, jsonify
+from werkzeug.security import generate_password_hash
+import re
+import datetime
+import jwt
+
 @app.route("/register", methods=["POST"])
 def register():
-    data = request.get_json()
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form  # untuk application/x-www-form-urlencoded
+
     username = data.get("username")
     email = data.get("email")
     password = data.get("password")
 
     # Validasi data kosong
     if not username or not email or not password:
-        return jsonify({"msg": "Missing data"}), 400
+        return jsonify({"error": True, "message": "Missing data"}), 400
 
     # Validasi format email
     email_regex = r"[^@]+@[^@]+\.[^@]+"
     if not re.match(email_regex, email):
-        return jsonify({"msg": "Invalid email format"}), 400
+        return jsonify({"error": True, "message": "Invalid email format"}), 400
 
     # Validasi panjang password
     if len(password) < 8:
-        return jsonify({"msg": "Password must be at least 8 characters"}), 400
+        return jsonify({"error": True, "message": "Password must be at least 8 characters"}), 400
 
     # Cek apakah user/email sudah ada
     if User.query.filter((User.username == username) | (User.email == email)).first():
-        return jsonify({"msg": "Username or email already exists"}), 409
+        return jsonify({"error": True, "message": "Username or email already exists"}), 409
 
+    # Simpan user baru
     hashed_password = generate_password_hash(password)
     user = User(username=username, email=email, password=hashed_password)
     db.session.add(user)
     db.session.commit()
 
-    # Generate JWT token
-    token = jwt.encode({
-        "user_id": user.id,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-    }, JWT_SECRET, algorithm="HS256")
+    # (Opsional) Generate token jika masih ingin digunakan
+    # token = jwt.encode({
+    #     "user_id": user.id,
+    #     "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    # }, JWT_SECRET, algorithm="HS256")
 
-    return jsonify({"token": token, "msg": "Registration successful"})
+    return jsonify({"error": False, "message": "User Created"}), 201
 
 # Fungsi untuk memverifikasi token JWT login
 @app.route("/login", methods=["POST"])
 def login():
-    data = request.get_json()
-    username = data.get("username")
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form  # untuk application/x-www-form-urlencoded
+
+    email = data.get("email")
     password = data.get("password")
 
-    user = User.query.filter_by(username=username).first()
-    if not user or not check_password_hash(user.password, password):
-        return jsonify({"msg": "Invalid username or password"}), 401
+    if not email or not password:
+        return jsonify({
+            "error": True,
+            "message": "Email and password are required"
+        }), 400
 
-    # Generate JWT token
+    user = User.query.filter_by(email=email).first()
+    if not user or not check_password_hash(user.password, password):
+        return jsonify({
+            "error": True,
+            "message": "Invalid email or password"
+        }), 401
+
     token = jwt.encode({
-        "user_id": user.id,
+        "userId": user.id,
         "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
     }, JWT_SECRET, algorithm="HS256")
 
-    return jsonify({"token": token})
+    return jsonify({
+        "error": False,
+        "message": "success",
+        "loginResult": {
+            "userId": f"user-{user.id}",
+            "name": user.username,
+            "token": token
+        }
+    }), 200
 
 
 # Get all articles

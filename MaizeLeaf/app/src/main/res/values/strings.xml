@@ -24,5 +24,14 @@
     <string name="retake">Ambil Ulang</string>
     <string name="image_classifier_failed">Klasifikasi gambar gagal</string>
     <string name="error_message">Terjadi kesalahan: %s</string>
+    <string name="logo_aplikasi">Logo Aplikasi</string>
+    <string name="login">login</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="belum_punya_akun">Belum Punya Akun ?</string>
+    <string name="register">register</string>
+    <string name="nama">Nama</string>
+    <string name="logout">Logout</string>
+    <string name="profile">Profile</string>
 
 </resources>

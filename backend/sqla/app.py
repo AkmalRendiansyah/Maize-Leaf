@@ -13,4 +13,4 @@ with app.app_context():
 if __name__ == "__main__":
     # Start app
     app.jinja_env.undefined = StrictUndefined
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

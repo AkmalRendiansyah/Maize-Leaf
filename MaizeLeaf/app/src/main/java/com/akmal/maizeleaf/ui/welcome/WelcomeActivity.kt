@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.akmal.maizeleaf.MainActivity
 import com.akmal.maizeleaf.R
 import com.akmal.maizeleaf.databinding.ActivityWelcomeBinding
+import com.akmal.maizeleaf.ui.login.LoginActivity
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
@@ -25,7 +26,7 @@ class WelcomeActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
         binding.button.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
     }
