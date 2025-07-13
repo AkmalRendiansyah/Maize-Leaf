@@ -8,15 +8,29 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.akmal.maizeleaf.MainActivity
 import com.akmal.maizeleaf.R
+import com.akmal.maizeleaf.data.UserPreference
+import com.akmal.maizeleaf.data.dataStore
 import com.akmal.maizeleaf.databinding.ActivityWelcomeBinding
 import com.akmal.maizeleaf.ui.login.LoginActivity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
+    private lateinit var userPreference: UserPreference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        userPreference = UserPreference.getInstance(dataStore)
+        val isLoggedIn = runBlocking {
+            userPreference.getSession().first().isLogin
+        }
 
+        if (isLoggedIn) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            return
+        }
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

@@ -145,6 +145,34 @@
         app:layout_constraintBottom_toBottomOf="@+id/tvNoAkun"
         app:layout_constraintStart_toEndOf="@id/tvNoAkun"
         app:layout_constraintTop_toTopOf="@+id/tvNoAkun" />
+    <TextView
+        android:id="@+id/tvNoQuest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Daftar sebagai Tamu?"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNoAkun" />
+
+    <TextView
+        android:id="@+id/tvQuest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Quest"
+        android:textColor="@color/yellow"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tvNoQuest"
+        app:layout_constraintStart_toEndOf="@id/tvNoQuest"
+        app:layout_constraintTop_toTopOf="@+id/tvNoQuest" />
+
 
 
     <androidx.constraintlayout.widget.Guideline

@@ -1,5 +1,6 @@
 package com.akmal.maizeleaf
 
+
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -17,8 +18,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.akmal.maizeleaf.databinding.ActivityMainBinding
 import com.akmal.maizeleaf.ui.camera.CameraActivity
 import com.akmal.maizeleaf.ui.history.HistoryFragment
-import com.akmal.maizeleaf.ui.home.HomeFragment
-import com.akmal.maizeleaf.ui.notifications.NotificationsFragment
 import com.akmal.maizeleaf.ui.profile.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
@@ -51,7 +50,8 @@ class MainActivity : AppCompatActivity() {
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
-
+        openFragment(HistoryFragment())
+        binding.bottomNavigation.selectedItemId = R.id.navigation_history
         binding.fab.setOnClickListener { startCameraX() }
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {

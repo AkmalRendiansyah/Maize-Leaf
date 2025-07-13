@@ -33,5 +33,11 @@
     <string name="nama">Nama</string>
     <string name="logout">Logout</string>
     <string name="profile">Profile</string>
-
+    <string name="tidak_terdeteksi">Gambar Daun Jagung Tidak Terdeteksi</string>
+    <string name="unggah_gambar_baru">Unggah Gambar Baru</string>
+    <string name="analisis_ulang">Silahkan unggah gambar baru untuk analisis ulang</string>
+    <string name="delete_alert">Hapus Riwayat</string>
+    <string name="are_you_sure_delete">Apakah Anda yakin ingin menghapus riwayat ini?</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
 </resources>

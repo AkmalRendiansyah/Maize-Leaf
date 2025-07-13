@@ -3,10 +3,11 @@ from flask_admin.base import MenuLink
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import FileUploadField
 from werkzeug.utils import secure_filename
+
 from flask import redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from admin import app, db
-from admin.models import User,Article,DeskripsiPenyakit, History
+from admin.models import User,DeskripsiPenyakit, History
 from flask import request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
@@ -107,32 +108,8 @@ def login():
     }), 200
 
 
-# Get all articles
-@app.route("/articles", methods=["GET"])
-def get_articles():
-    articles = Article.query.all()
-    results = []
-    for article in articles:
-        results.append({
-            "id": article.id,
-            "judul": article.judul,
-            "isi": article.isi,
-            "gambar": article.gambar  # sertakan path/URL gambar
-        })
-    return jsonify(results)
-
-@app.route("/articles/<int:id>", methods=["GET"])
-def get_article(id):
-    article = Article.query.get_or_404(id)
-    return jsonify({
-        "id": article.id,
-        "judul": article.judul,
-        "isi": article.isi,
-        "gambar": article.gambar
-    })
 
 # ==== SAVE HISTORY ====
-
 @app.route("/history", methods=["POST"])
 def save_history():
     auth_header = request.headers.get("Authorization")
@@ -140,40 +117,50 @@ def save_history():
         return jsonify({"msg": "Missing or invalid token"}), 401
 
     token = auth_header.split(" ")[1]
-
     try:
         decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        user_id = decoded["user_id"]
+        user_id = decoded["userId"]
     except jwt.ExpiredSignatureError:
         return jsonify({"msg": "Token expired"}), 401
     except jwt.InvalidTokenError:
         return jsonify({"msg": "Invalid token"}), 401
 
-    data = request.get_json()
-    penyakit = data.get("penyakit")
+    penyakit = request.form.get("penyakit")
+    file = request.files.get("gambar")
 
     if not penyakit:
         return jsonify({"msg": "Penyakit is required"}), 400
 
     deskripsi_record = DeskripsiPenyakit.query.filter_by(penyakit=penyakit).first()
-    if deskripsi_record is None:
-        return jsonify({"msg": f"Penyakit '{penyakit}' tidak ditemukan di database."}), 404
+    if not deskripsi_record:
+        return jsonify({"msg": f"Penyakit '{penyakit}' tidak ditemukan."}), 404
 
-    if not deskripsi_record.deskripsi:
-        return jsonify({"msg": f"Deskripsi penyakit '{penyakit}' kosong di database."}), 500
+    filename = None
+    if file:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
 
     history = History(
         id_user=user_id,
         penyakit=penyakit,
-        deskripsi=deskripsi_record.deskripsi
+        deskripsi=deskripsi_record.deskripsi,
+        gambar=filename
     )
     db.session.add(history)
     db.session.commit()
 
-    return jsonify({"msg": "History saved successfully"})
+    return jsonify({
+        "msg": "History saved successfully",
+        "history": {
+            "id_user": user_id,
+            "penyakit": penyakit,
+            "deskripsi": deskripsi_record.deskripsi,
+            "gambar": filename,
+            "created_at": history.created_at.isoformat()
 
+        }
+    }), 201
 
-# ==== GET USER HISTORY ====
 @app.route("/history", methods=["GET"])
 def get_user_history():
     auth_header = request.headers.get("Authorization")
@@ -181,23 +168,77 @@ def get_user_history():
         return jsonify({"msg": "Missing or invalid token"}), 401
 
     token = auth_header.split(" ")[1]
-
     try:
         decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        user_id = decoded["user_id"]
+        user_id = decoded["userId"]
     except jwt.ExpiredSignatureError:
         return jsonify({"msg": "Token expired"}), 401
     except jwt.InvalidTokenError:
         return jsonify({"msg": "Invalid token"}), 401
 
     histories = History.query.filter_by(id_user=user_id).all()
-    results = [{
-        "id": h.id,
-        "penyakit": h.penyakit,
-        "deskripsi": h.deskripsi
-    } for h in histories]
+    results = []
+    for h in histories:
+        results.append({
+            "id": h.id,
+            "penyakit": h.penyakit,
+            "deskripsi": h.deskripsi,
+            "gambar": url_for("static", filename=f"uploads/{h.gambar}", _external=True) if h.gambar else None,
+            "created_at": h.created_at.isoformat()
+            
+        })
 
     return jsonify(results)
+
+
+@app.route("/history/<int:id>", methods=["DELETE"])
+def delete_history(id):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return jsonify({"msg": "Missing or invalid token"}), 401
+
+    token = auth_header.split(" ")[1]
+    try:
+        decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        user_id = decoded["userId"]
+    except jwt.ExpiredSignatureError:
+        return jsonify({"msg": "Token expired"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"msg": "Invalid token"}), 401
+
+    history = History.query.filter_by(id=id, id_user=user_id).first()
+    if not history:
+        return jsonify({"msg": "History not found or unauthorized"}), 404
+
+    # Hapus gambar jika ada
+    if history.gambar:
+        image_path = os.path.join(UPLOAD_FOLDER, history.gambar)
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+    db.session.delete(history)
+    db.session.commit()
+
+    return jsonify({"msg": "History deleted successfully"}), 200
+
+# Get all deskripsi penyakit
+@app.route("/deskripsipenyakit", methods=["GET"])
+def get_deskripsi_penyakit():
+    nama_penyakit = request.args.get("penyakit")  # ambil query param
+    if not nama_penyakit:
+        return jsonify({"error": "Parameter 'penyakit' wajib diisi"}), 400
+
+    penyakit = DeskripsiPenyakit.query.filter_by(penyakit=nama_penyakit).first()
+    
+    if penyakit:
+        result = {
+            "id": penyakit.id,
+            "penyakit": penyakit.penyakit,
+            "deskripsi": penyakit.deskripsi
+        }
+        return jsonify(result)  # ✅ mengembalikan JSON Object
+    else:
+        return jsonify({"error": "Penyakit tidak ditemukan"}), 404
 
 
 # Flask views
@@ -234,29 +275,6 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static/uploads')
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-class ArticleAdmin(ModelView):
-    can_set_page_size = True
-    page_size = 10
-    can_view_details = True
-    column_list = ["id", "judul", "isi", "gambar"]
-    column_searchable_list = ["judul"]
-    form_columns = ["judul", "isi", "gambar"]
-
-    # Gunakan file upload untuk gambar
-    form_extra_fields = {
-        'gambar': FileUploadField('Gambar',
-                                 base_path=UPLOAD_FOLDER,
-                                 allow_overwrite=False,
-                                 namegen=lambda obj, file_data: secure_filename(file_data.filename))
-    }
-
-    # Override on_model_change untuk simpan nama file gambar di db
-    def on_model_change(self, form, model, is_created):
-        if form.gambar.data:
-            # form.gambar.data sudah otomatis disimpan ke base_path oleh FileUploadField
-            model.gambar = form.gambar.data.filename
-        return super().on_model_change(form, model, is_created)
-
 class DeskripsiPenyakitAdmin(ModelView):
     can_set_page_size = True
     page_size = 10
@@ -286,7 +304,6 @@ def on_model_change(self, form, model, is_created):
 # Create admin
 admin = Admin(app, name="User Admin")
 admin.add_view(UserAdmin(User, db.session))
-admin.add_view(ArticleAdmin(Article, db.session))
 admin.add_view(DeskripsiPenyakitAdmin(DeskripsiPenyakit, db.session))
 admin.add_view(HistoryAdmin(History, db.session))
 admin.add_link(MenuLink(name="Back Home", url="/"))

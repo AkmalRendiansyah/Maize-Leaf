@@ -22,6 +22,7 @@ import com.akmal.maizeleaf.data.UserModel
 import com.akmal.maizeleaf.data.UserPreference
 import com.akmal.maizeleaf.data.dataStore
 import com.akmal.maizeleaf.databinding.ActivityLoginBinding
+import com.akmal.maizeleaf.ui.camera.CameraActivity
 import com.akmal.maizeleaf.ui.register.RegisterActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -49,6 +50,10 @@ class LoginActivity : AppCompatActivity() {
 
         binding.tvRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+        binding.tvQuest.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }

@@ -55,18 +55,16 @@
         app:tint="@color/yellow"
         android:contentDescription="take_image"/>
 
-    <ImageButton
-        android:id="@+id/button_snap_tips"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="43dp"
-        android:background="@android:color/transparent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/baseline_help_24"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_url"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="Url Gambar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_take_picture"
-        app:tint="@color/yellow"
-        android:contentDescription="tips"/>
+        app:strokeColor="?attr/colorPrimary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

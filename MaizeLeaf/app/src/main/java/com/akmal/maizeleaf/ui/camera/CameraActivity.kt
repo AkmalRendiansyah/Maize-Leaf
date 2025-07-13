@@ -53,6 +53,10 @@ class CameraActivity : AppCompatActivity() {
         binding.buttonTakePicture.setOnClickListener {
             takePhoto()
         }
+        binding.buttonUrl.setOnClickListener {
+            val intent = Intent(this, UrlActivity::class.java)
+            startActivity(intent)
+        }
     }
     private fun takePhoto() {
 
