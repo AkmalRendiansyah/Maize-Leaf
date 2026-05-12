@@ -54,7 +54,37 @@ interface ApiService {
         @Path("id") id: Int
     ): Response<Unit>
 
+    @Multipart
+    @POST("posting")
+    suspend fun postChat(
+        @Header("Authorization") token: String,
+        @Part("deskripsi") deskripsi: RequestBody,
+        @Part gambar: MultipartBody.Part
+    ): PostingResponse
 
+    @GET("posting")
+    suspend fun getPosting(
+        @Header("Authorization") token: String
+    ): List<GetAllPostingResponseItem>
+
+    @GET("komentar/{id}")
+    suspend fun getKomentarById(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): List<GetKomentarResponseItem>
+
+    @FormUrlEncoded
+    @POST("komentar")
+    suspend fun postKomentar(
+        @Header("Authorization") token: String,
+        @Field("id_posting") idPosting: Int,
+        @Field("komentar") komentar: String,
+    ): PostKomentarResponse
+
+    @GET("artikel")
+    suspend fun getArtikel(
+        @Header("Authorization") token: String
+    ): List<GetArtikelResponseItem>
 
 
 

@@ -16,8 +16,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.akmal.maizeleaf.databinding.ActivityMainBinding
+import com.akmal.maizeleaf.ui.artikel.ArtikelFragment
 import com.akmal.maizeleaf.ui.camera.CameraActivity
 import com.akmal.maizeleaf.ui.history.HistoryFragment
+import com.akmal.maizeleaf.ui.listPosting.PostingFragment
 import com.akmal.maizeleaf.ui.profile.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
@@ -50,8 +52,8 @@ class MainActivity : AppCompatActivity() {
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
-        openFragment(HistoryFragment())
-        binding.bottomNavigation.selectedItemId = R.id.navigation_history
+        openFragment(PostingFragment())
+        binding.bottomNavigation.selectedItemId = R.id.navigation_posting
         binding.fab.setOnClickListener { startCameraX() }
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -65,12 +67,43 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.navigation_posting -> {
+                    openFragment(PostingFragment())
+                    true
+                }
+
+                R.id.navigation_artikel -> {
+                    openFragment(ArtikelFragment())
+                    true
+                }
+
 
 
                 else -> false
             }
         }
+        if (intent.hasExtra("UPLOAD_STATUS")) {
+            val isSuccess = intent.getBooleanExtra("UPLOAD_STATUS", false)
+            val message = intent.getStringExtra("UPLOAD_MESSAGE") ?: ""
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
+        handleUploadStatus(intent)
 
+    }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleUploadStatus(intent)
+    }
+    private fun handleUploadStatus(intent: Intent) {
+        if (intent.hasExtra("UPLOAD_STATUS")) {
+            val isSuccess = intent.getBooleanExtra("UPLOAD_STATUS", false)
+            val message = intent.getStringExtra("UPLOAD_MESSAGE") ?: ""
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+            intent.removeExtra("UPLOAD_STATUS")
+            intent.removeExtra("UPLOAD_MESSAGE")
+        }
     }
     private fun openFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

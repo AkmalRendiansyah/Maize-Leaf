@@ -5,10 +5,10 @@ from admin import app
 from admin.data import build_sample_db
 from jinja2 import StrictUndefined
 
-# Untuk MySQL, tidak perlu membuat file database SQLite
-# Jika ingin mengisi sample data, cukup panggil build_sample_db di dalam app context
-with app.app_context():
-    build_sample_db()
+# # Untuk MySQL, tidak perlu membuat file database SQLite
+# # Jika ingin mengisi sample data, cukup panggil build_sample_db di dalam app context
+# with app.app_context():
+#     build_sample_db()
 
 if __name__ == "__main__":
     # Start app

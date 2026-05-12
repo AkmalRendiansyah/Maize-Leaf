@@ -2,13 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_history"
+        android:id="@+id/navigation_posting"
+        android:icon="@drawable/chat"
+        android:title="@string/posting" />
+    <item
+        android:id="@+id/navigation_artikel"
         android:icon="@drawable/baseline_collections_bookmark_24"
-        android:title="@string/History" />
+        android:title="@string/Artikel" />
 
     <item
         android:id="@+id/navigation_scan"
         android:title="" />
+    <item
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/ic_history"
+        android:title="@string/History" />
 
     <item
         android:id="@+id/navigation_profile"
