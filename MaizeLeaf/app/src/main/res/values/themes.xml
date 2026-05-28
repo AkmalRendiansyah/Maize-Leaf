@@ -16,7 +16,7 @@
         <!-- Background & Surface -->
         <item name="android:colorBackground">#FAFAF5</item>
         <item name="colorSurface">#FFFFFF</item>
-        <item name="colorOnBackground">#1B1B1B</item>
+        <item name="colorOnBackground">#1F1F1F</item>
         <item name="colorOnSurface">#1B1B1B</item>
 
         <!-- Error color -->

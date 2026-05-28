@@ -23,6 +23,7 @@ import com.akmal.maizeleaf.data.UserPreference
 import com.akmal.maizeleaf.data.dataStore
 import com.akmal.maizeleaf.databinding.ActivityLoginBinding
 import com.akmal.maizeleaf.ui.camera.CameraActivity
+import com.akmal.maizeleaf.ui.otp.VerifyOtpActivity
 import com.akmal.maizeleaf.ui.register.RegisterActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -120,7 +121,6 @@ class LoginActivity : AppCompatActivity() {
                     userPreference.saveSession(userModel)
 
                     Toast.makeText(this@LoginActivity, response.message, Toast.LENGTH_SHORT).show()
-                    finish()
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
@@ -132,8 +132,28 @@ class LoginActivity : AppCompatActivity() {
                 //get error message
                 val jsonInString = e.response()?.errorBody()?.string()
                 val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-                val errorMessage = errorBody.message
-                Toast.makeText(this@LoginActivity, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
+                if (e.code() == 403) {
+                    val userId = errorBody?.userId
+                    Log.d("LoginActivity", "Akun belum terverifikasi, userId=$userId")
+
+                    Toast.makeText(
+                        this@LoginActivity,
+                        errorBody?.message ?: "Akun belum diverifikasi",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val intent = Intent(this@LoginActivity, VerifyOtpActivity::class.java)
+                    intent.putExtra(VerifyOtpActivity.EXTRA_USER_ID, userId)
+                    intent.putExtra(VerifyOtpActivity.EXTRA_EMAIL, email)
+                    intent.putExtra(VerifyOtpActivity.EXTRA_PASSWORD, password)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Error: ${errorBody?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

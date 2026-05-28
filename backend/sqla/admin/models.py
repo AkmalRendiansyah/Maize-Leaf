@@ -8,6 +8,7 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False) 
+    status = db.Column(db.Boolean, default=False, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     histories = db.relationship('History', backref='user', lazy=True)
     postings = db.relationship('Posting', backref='user', lazy=True)  
@@ -83,3 +84,14 @@ class Artikel(db.Model):
     def __repr__(self):
         return f"<Artikel {self.id}>"
 
+class OTP(db.Model):
+    __tablename__ = "otp"
+
+    id         = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_user    = db.Column(db.SmallInteger, db.ForeignKey('user.id'), nullable=False)
+    kode       = db.Column(db.String(6), nullable=False)        
+    expired_at = db.Column(db.DateTime, nullable=False)         
+    is_used    = db.Column(db.Boolean, default=False)           
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref='otp')

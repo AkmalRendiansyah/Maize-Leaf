@@ -196,4 +196,10 @@
     <string name="referensi">referensi</string>
     <string name="Referensi">Referensi</string>
     <string name="isi_referensi">isi referensi</string>
+    <string name="verifikasi_otp">Verifikasi OTP</string>
+    <string name="kode_otp_6_digit_telah_dikirimkan_ke">Kode OTP 6 digit telah dikirimkan ke</string>
+    <string name="verifikasi">Verifikasi</string>
+    <string name="kirim_ulang_dalam">Kirim ulang dalam</string>
+    <string name="tidak_menerima_kode">Tidak menerima kode?</string>
+    <string name="kirim_ulang">Kirim Ulang</string>
 </resources>

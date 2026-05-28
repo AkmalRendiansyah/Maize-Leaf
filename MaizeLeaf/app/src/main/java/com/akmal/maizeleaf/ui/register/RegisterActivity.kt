@@ -22,6 +22,7 @@ import com.akmal.maizeleaf.data.UserPreference
 import com.akmal.maizeleaf.data.dataStore
 import com.akmal.maizeleaf.databinding.ActivityRegisterBinding
 import com.akmal.maizeleaf.ui.login.LoginActivity
+import com.akmal.maizeleaf.ui.otp.VerifyOtpActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -107,15 +108,20 @@ class RegisterActivity : AppCompatActivity() {
                 val response: RegisterResponse = apiService.register(name, email, password)
                 if (response.error == false) {
 
-                    val userModel = UserModel(
-                        username = name,
-                        email = email,
-                        token = "TOKEN",
-                        isLogin = true
-                    )
-                    userPreference.saveSession(userModel)
+//                    val userModel = UserModel(
+//                        username = name,
+//                        email = email,
+//                        token = "TOKEN",
+//                        isLogin = true
+//                    )
+//                    userPreference.saveSession(userModel)
 
                     Toast.makeText(this@RegisterActivity, response.message, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@RegisterActivity, VerifyOtpActivity::class.java)
+                    intent.putExtra(VerifyOtpActivity.EXTRA_USER_ID, response.userId)
+                    intent.putExtra(VerifyOtpActivity.EXTRA_EMAIL, email)
+                    intent.putExtra(VerifyOtpActivity.EXTRA_PASSWORD, password)
+                    startActivity(intent)
                     finish()
                 } else {
                     Toast.makeText(this@RegisterActivity, response.message, Toast.LENGTH_SHORT).show()

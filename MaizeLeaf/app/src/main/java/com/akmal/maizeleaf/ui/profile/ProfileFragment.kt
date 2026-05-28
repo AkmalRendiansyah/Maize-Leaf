@@ -61,8 +61,8 @@ class ProfileFragment : Fragment() {
         binding.nameTextView.visibility = View.GONE
         binding.emailTextView.visibility = View.GONE
         binding.logoutButton.visibility = View.GONE
-        binding.nameLabel.visibility = View.GONE
-        binding.emailLabel.visibility = View.GONE
+//        binding.nameLabel.visibility = View.GONE
+//        binding.emailLabel.visibility = View.GONE
     }
     private fun logout() {
         lifecycleScope.launch {

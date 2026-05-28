@@ -86,6 +86,19 @@ interface ApiService {
         @Header("Authorization") token: String
     ): List<GetArtikelResponseItem>
 
+    @FormUrlEncoded
+    @POST("verify-otp")
+    suspend fun verifyOtp(
+        @Field("userId") userId: Int,
+        @Field("otp") otp: Int
+    ): VerifyOtpResponse
+
+    @FormUrlEncoded
+    @POST("resend-otp")
+    suspend fun resendOtp(
+        @Field("userId") userId: Int
+    ): VerifyOtpResponse
+
 
 
 }
