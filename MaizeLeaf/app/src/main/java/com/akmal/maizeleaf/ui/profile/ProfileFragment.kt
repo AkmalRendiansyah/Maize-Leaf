@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.akmal.maizeleaf.R
 import com.akmal.maizeleaf.data.UserPreference
@@ -15,6 +16,7 @@ import com.akmal.maizeleaf.databinding.FragmentProfileBinding
 import com.akmal.maizeleaf.ui.login.LoginActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 
 class ProfileFragment : Fragment() {
@@ -43,19 +45,28 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
     private fun observeUserData() {
+        setLoading(true)
         viewLifecycleOwner.lifecycleScope.launch {
-            val user = userPreference.getSession().first()
-            if (user.token.isNotEmpty()) {
-
-                binding.nameTextView.text = user.username
-                binding.emailTextView.text = user.email
-
-            } else {
-
-            showNoLogin()
-        }
+            try {
+                val user = userPreference.getSession().first()
+                if (user.token.isNotEmpty()) {
+                    binding.nameTextView.text = user.username
+                    binding.emailTextView.text = user.email
+                } else {
+                    showNoLogin()
+                }
+            } catch (e: IOException) {
+                Toast.makeText(
+                    requireContext(),
+                    "Tidak ada koneksi internet. Periksa jaringan Anda.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } finally {
+                setLoading(false)
+            }
         }
     }
+
     private fun showNoLogin() {
         binding.tvNoLogin.visibility = View.VISIBLE
         binding.nameTextView.visibility = View.GONE
@@ -75,5 +86,9 @@ class ProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun setLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+
     }
 }

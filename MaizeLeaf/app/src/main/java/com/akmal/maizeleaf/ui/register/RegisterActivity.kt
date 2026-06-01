@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +28,7 @@ import com.akmal.maizeleaf.ui.otp.VerifyOtpActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.io.IOException
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -100,9 +103,14 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    private fun setLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.signupButton.isEnabled = !isLoading
+    }
 
     private fun registerUser(name: String, email: String, password: String) {
         lifecycleScope.launch {
+            setLoading(true)
             try {
                 Log.d("SignupActivity", "Register data: name=$name, email=$email, password=$password")
                 val response: RegisterResponse = apiService.register(name, email, password)
@@ -120,6 +128,7 @@ class RegisterActivity : AppCompatActivity() {
                     val intent = Intent(this@RegisterActivity, VerifyOtpActivity::class.java)
                     intent.putExtra(VerifyOtpActivity.EXTRA_USER_ID, response.userId)
                     intent.putExtra(VerifyOtpActivity.EXTRA_EMAIL, email)
+                    intent.putExtra(VerifyOtpActivity.EXTRA_USERNAME, name)
                     intent.putExtra(VerifyOtpActivity.EXTRA_PASSWORD, password)
                     startActivity(intent)
                     finish()
@@ -132,6 +141,14 @@ class RegisterActivity : AppCompatActivity() {
                 val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
                 val errorMessage = errorBody.message
                 Toast.makeText(this@RegisterActivity, "Error: $errorMessage", Toast.LENGTH_SHORT).show()
+            }catch (e: IOException) {
+                Toast.makeText(
+                    this@RegisterActivity,
+                    "Tidak ada koneksi internet. Periksa jaringan Anda.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }finally {
+                setLoading(false)
             }
         }
     }

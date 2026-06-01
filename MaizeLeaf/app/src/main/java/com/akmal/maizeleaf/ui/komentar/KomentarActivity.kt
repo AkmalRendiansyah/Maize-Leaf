@@ -3,6 +3,7 @@ package com.akmal.maizeleaf.ui.komentar
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
@@ -35,7 +36,6 @@ class KomentarActivity : AppCompatActivity() {
             insets
         }
 
-        // Ambil data dari Intent
         val postingId = intent.getIntExtra("POSTING_ID", 0)
         val deskripsi = intent.getStringExtra("POSTING_DESKRIPSI") ?: ""
         val gambar = intent.getStringExtra("POSTING_GAMBAR")
@@ -77,6 +77,15 @@ class KomentarActivity : AppCompatActivity() {
                 }
             }
         }
+        viewModel.isLoading.observe(this) { isLoading ->
+            setLoading(isLoading)
+        }
+        viewModel.errorMessage.observe(this) { message ->
+            message?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                viewModel.clearError()
+            }
+        }
         viewModel.komentarList.observe(this) { komentarList ->
             if (komentarList.isNullOrEmpty()) {
                 showNoHistory()
@@ -91,6 +100,11 @@ class KomentarActivity : AppCompatActivity() {
     private fun showNoHistory() {
         binding.tvNoKomentar.visibility = View.VISIBLE
         binding.rvKomentar.visibility = View.GONE
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.btnKirim.isEnabled = !isLoading
     }
 
 }

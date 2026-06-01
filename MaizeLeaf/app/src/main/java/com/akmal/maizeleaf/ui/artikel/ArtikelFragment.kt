@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
@@ -54,6 +55,16 @@ class ArtikelFragment : Fragment() {
         viewModel = ArtikelViewModel(userPreference, apiService)
 
         setupRecyclerView()
+
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            setLoading(isLoading)
+        }
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                viewModel.clearError()
+            }
+        }
 
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             val token = user.token
@@ -128,6 +139,9 @@ class ArtikelFragment : Fragment() {
         binding.tvNoLogin.visibility = View.VISIBLE
         binding.tvNoArtikel.visibility = View.GONE
         binding.rvArtikel.visibility = View.GONE
+    }
+    private fun setLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 

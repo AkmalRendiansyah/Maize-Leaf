@@ -202,4 +202,8 @@
     <string name="kirim_ulang_dalam">Kirim ulang dalam</string>
     <string name="tidak_menerima_kode">Tidak menerima kode?</string>
     <string name="kirim_ulang">Kirim Ulang</string>
+    <string name="scan">scan</string>
+    <string name="hapus_history">Hapus History</string>
+    <string name="tulis_komentar">Tulis komentar...</string>
+    <string name="hapus_posting">hapus posting</string>
 </resources>

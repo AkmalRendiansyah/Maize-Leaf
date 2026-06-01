@@ -1,31 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MaizeLeaf" parent="Theme.MaterialComponents.DayNight">
+    <style name="Theme.MaizeLeaf" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/yellow</item>
+        <item name="colorPrimary">#dddf00</item>
         <item name="colorPrimaryVariant">#D6C761</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <!-- Secondary color (hijau daun jagung) -->
-        <item name="colorSecondary">#4CAF50</item>
-        <item name="colorSecondaryVariant">#388E3C</item>
-        <item name="colorOnSecondary">@color/white</item>
 
-        <!-- Background & Surface -->
-        <item name="android:colorBackground">#FAFAF5</item>
-        <item name="colorSurface">#FFFFFF</item>
-        <item name="colorOnBackground">#1F1F1F</item>
-        <item name="colorOnSurface">#1B1B1B</item>
 
-        <!-- Error color -->
-        <item name="colorError">#B00020</item>
-        <item name="colorOnError">@color/white</item>
-
-        <!-- Text -->
-        <item name="android:textColorPrimary">#1B1B1B</item>
-        <item name="android:textColorSecondary">#5C5C5C</item>
 
     </style>
     <!-- Base application theme. -->
@@ -33,7 +14,7 @@
 
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimary">@color/yellow</item>
+        <item name="colorPrimary">#dddf00</item>
         <item name="colorSecondary">#4CAF50</item>
         <item name="colorTertiary">#8D6E63</item>
         <item name="android:colorBackground">#FAFAF5</item>
@@ -44,5 +25,6 @@
         <item name="colorOnSurface">#1B1B1B</item>
         <item name="colorError">#B00020</item>
         <item name="colorOnError">@color/white</item>
+        <item name="colorSecondaryContainer">#dddf00</item>
     </style>
 </resources>

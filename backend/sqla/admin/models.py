@@ -53,7 +53,7 @@ class Posting(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
-    komentars = db.relationship('Komentar', backref='posting', lazy=True)
+    komentars = db.relationship('Komentar', backref='posting',cascade="all, delete-orphan", lazy=True)
 
     def __repr__(self):
         return f"<Posting {self.id}>"

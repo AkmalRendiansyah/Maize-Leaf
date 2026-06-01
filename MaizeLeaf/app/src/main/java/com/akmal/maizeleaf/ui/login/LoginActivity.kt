@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
@@ -28,6 +29,7 @@ import com.akmal.maizeleaf.ui.register.RegisterActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
@@ -103,8 +105,13 @@ class LoginActivity : AppCompatActivity() {
             else -> true
         }
     }
+    private fun setLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.loginButton.isEnabled = !isLoading
+    }
 
     private fun loginUser( email: String, password: String) {
+        setLoading(true)
         lifecycleScope.launch {
             try {
                 Log.d("LoginActivity", "Login data:  email=$email, password=$password")
@@ -154,6 +161,13 @@ class LoginActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+            }catch (e: IOException){
+                Toast.makeText(this@LoginActivity,
+                    "Tidak ada koneksi internet. Periksa jaringan Anda.",
+                    Toast.LENGTH_SHORT).show()
+            }
+            finally {
+                setLoading(false)
             }
         }
     }

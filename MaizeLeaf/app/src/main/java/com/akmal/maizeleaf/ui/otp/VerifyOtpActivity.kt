@@ -26,6 +26,7 @@ import com.akmal.maizeleaf.databinding.ActivityVerifyOtpBinding
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.io.IOException
 
 class VerifyOtpActivity : AppCompatActivity() {
 
@@ -38,6 +39,7 @@ class VerifyOtpActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_USER_ID = "extra_user_id"
         const val EXTRA_EMAIL   = "extra_email"
+        const val EXTRA_USERNAME   = "extra_username"
         const val EXTRA_PASSWORD = "extra_password"
     }
 
@@ -113,12 +115,17 @@ class VerifyOtpActivity : AppCompatActivity() {
         binding.btnVerify.isEnabled = otpBoxes.all { it.text.length == 1 }
     }
 
+    private fun setLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.btnVerify.isEnabled = !isLoading
+    }
+
     private fun verifyOtp(otp: Int) {
         if (userId == -1) {
             Toast.makeText(this, "User ID tidak valid", Toast.LENGTH_SHORT).show()
             return
         }
-
+        setLoading(true)
         lifecycleScope.launch {
             try {
                 // userId dikirim sebagai String sesuai signature ApiService
@@ -135,8 +142,9 @@ class VerifyOtpActivity : AppCompatActivity() {
                     val token = response.token
                     Log.d("LoginActivity", "Token berhasil diperoleh: $token")
                     val email = intent.getStringExtra(EXTRA_EMAIL) ?: ""
+                    val username = intent.getStringExtra(EXTRA_USERNAME) ?: ""
                     val userModel = UserModel(
-                        username =  "",
+                        username =  username,
                         email = email,
                         token = token.toString(),
                         isLogin = true
@@ -159,6 +167,14 @@ class VerifyOtpActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
                 clearOtpBoxes()
+            }catch (e: IOException) {
+                Toast.makeText(
+                    this@VerifyOtpActivity,
+                    "Tidak ada koneksi internet. Periksa jaringan Anda.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }finally {
+                setLoading(false)
             }
         }
     }
@@ -168,7 +184,7 @@ class VerifyOtpActivity : AppCompatActivity() {
             Toast.makeText(this, "User ID tidak valid", Toast.LENGTH_SHORT).show()
             return
         }
-
+        setLoading(true)
         lifecycleScope.launch {
             try {
                 val response = ApiConfig.getApiService().resendOtp(
@@ -193,6 +209,8 @@ class VerifyOtpActivity : AppCompatActivity() {
                     "Error: ${errorBody?.message}",
                     Toast.LENGTH_SHORT
                 ).show()
+            }finally {
+                setLoading(false)
             }
         }
     }

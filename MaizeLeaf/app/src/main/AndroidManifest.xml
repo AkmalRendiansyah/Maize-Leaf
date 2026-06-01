@@ -30,12 +30,6 @@
             android:exported="false"
             android:theme="@style/Theme.MaizeLeaf" />
         <activity
-            android:name=".ui.viewArtikel.PreviewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.artikel.PreviewArtikelActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.komentar.KomentarActivity"
             android:exported="false" />
         <activity

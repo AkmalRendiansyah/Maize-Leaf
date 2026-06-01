@@ -45,7 +45,7 @@
                     android:layout_marginTop="8dp"
                     android:text="Hasil klasifikasi"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@android:color/black" />
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:backgroundTint="@color/yellow"
+            android:backgroundTint="?attr/colorPrimary"
             android:text="Selesai"
             android:textColor="@android:color/white" />
     </LinearLayout>

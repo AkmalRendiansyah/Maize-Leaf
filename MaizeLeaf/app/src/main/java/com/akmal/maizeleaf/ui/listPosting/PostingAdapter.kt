@@ -2,6 +2,7 @@ package com.akmal.maizeleaf.ui.listPosting
 
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -17,8 +18,16 @@ import com.bumptech.glide.Glide
 
 class PostingAdapter(
     private val onPostingClick: (GetAllPostingResponseItem) -> Unit,
-//    private val onDeleteClick: (GetHistoryResponseItem) -> Unit
+    private val onDeleteClick: (GetAllPostingResponseItem) -> Unit
 ) : ListAdapter<GetAllPostingResponseItem, PostingAdapter.PostingViewHolder>(DiffCallback) {
+
+    private var showDelete = false
+
+    fun setShowDelete(show: Boolean) {
+        if (showDelete == show) return
+        showDelete = show
+        notifyItemRangeChanged(0, itemCount)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostingViewHolder {
         val binding = ItemChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,9 +37,12 @@ class PostingAdapter(
     override fun onBindViewHolder(holder: PostingViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
+        holder.binding.btnDelete.visibility =
+            if (showDelete) View.VISIBLE else View.GONE
+        holder.binding.btnDelete.setOnClickListener { onDeleteClick(item) }
     }
 
-    inner class PostingViewHolder(private val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PostingViewHolder( val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: GetAllPostingResponseItem) {
             binding.tvUsername.text = item.username
             binding.tvTime.text = item.createdAt

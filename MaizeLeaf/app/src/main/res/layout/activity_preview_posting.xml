@@ -21,8 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="#FFFFFF"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -37,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:textColor="#1B1B1B"
+                android:textColor="?attr/colorOnSurface"
                 android:text="@string/deskripsi_gambar"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -75,6 +74,7 @@
                     <ImageView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
+                        app:tint="?attr/colorPrimary"
                         android:contentDescription="@string/back"
                         android:src="@android:drawable/ic_menu_revert" />
 
@@ -82,7 +82,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:textColor="#1B1B1B"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="@string/kembali"
                         android:textSize="12sp" />
 
@@ -106,13 +106,14 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:contentDescription="save"
+                        app:tint="?attr/colorPrimary"
                         android:src="@android:drawable/ic_menu_save" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:textColor="#1B1B1B"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="@string/simpan"
                         android:textSize="12sp" />
 
@@ -123,5 +124,27 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#80000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="@android:color/white" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

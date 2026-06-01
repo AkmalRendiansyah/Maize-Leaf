@@ -1,9 +1,10 @@
 from flask import Blueprint, request, jsonify
 from admin import db
 from admin.models import Posting, Komentar
+import os
 from ..utils.auth_helper import token_required
 from ..utils.date_helper import format_tanggal
-from ..utils.upload_helper import save_file
+from ..utils.upload_helper import save_file,UPLOAD_FOLDER
 
 posting_bp = Blueprint("posting_api", __name__)
 
@@ -50,6 +51,26 @@ def get_posting(user_id):
 
     return jsonify(results)
 
+@posting_bp.route("/myposting", methods=["GET"])
+@token_required
+def get_my_posting(user_id):
+    postchats = Posting.query.filter_by(id_user=user_id).order_by(Posting.created_at.desc()).all()
+
+    results = []
+    for p in postchats:
+        sum_komentar = Komentar.query.filter_by(id_posting=p.id).count()
+        results.append({
+            "id":              p.id,
+            "username":        p.user.username,
+            "deskripsi":       p.deskripsi,
+            "jumlah_komentar": sum_komentar,
+            "gambar":          f"{request.host_url}static/uploads/{p.gambar}" if p.gambar else None,
+            "created_at":      format_tanggal(p.created_at)
+        })
+
+    return jsonify(results)
+
+
 
 @posting_bp.route("/posting/<int:id>", methods=["GET"])
 @token_required
@@ -65,6 +86,22 @@ def get_posting_by_id(user_id, id):
         "created_at": posting.created_at.isoformat()
     })
 
+@posting_bp.route("/posting/<int:id>", methods=["DELETE"])
+@token_required
+def delete_posting(user_id, id):
+    posting = Posting.query.filter_by(id=id, id_user=user_id).first()
+    if not posting:
+        return jsonify({"msg": "Posting not found or unauthorized"}), 404
+
+    if posting.gambar:
+        image_path = os.path.join(UPLOAD_FOLDER, posting.gambar)
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+    db.session.delete(posting)
+    db.session.commit()
+
+    return jsonify({"msg": "Posting deleted successfully"}), 200
 
 
 @posting_bp.route("/komentar", methods=["POST"])

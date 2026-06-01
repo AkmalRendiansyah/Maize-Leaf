@@ -29,7 +29,7 @@
         android:id="@+id/dialog_try_again_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/yellow"
+        android:backgroundTint="?attr/colorPrimary"
         android:text="@string/unggah_gambar_baru"
         android:textColor="@android:color/white" />
 </LinearLayout>

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akmal.maizeleaf.R
@@ -50,6 +51,16 @@ class HistoryFragment : Fragment() {
 
         setupRecyclerView()
 
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            setLoading(isLoading)
+        }
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                viewModel.clearError()
+            }
+        }
+
         viewModel.getSession().observe(viewLifecycleOwner) { user ->
             val token = user.token
             userToken = token
@@ -70,6 +81,7 @@ class HistoryFragment : Fragment() {
                 adapter.submitList(historyList)
             }
         }
+
         binding.tvNoLogin.setOnClickListener {
             val intent = Intent(requireContext(), LoginActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -89,6 +101,7 @@ class HistoryFragment : Fragment() {
                     showDeleteConfirmationDialog(historyId)
                 }
             }
+
 
         )
         binding.rvHistory.layoutManager = LinearLayoutManager(requireContext())
@@ -111,6 +124,7 @@ class HistoryFragment : Fragment() {
             .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                 dialog.dismiss()
             }
+
         builder.create().show()
     }
 
@@ -128,5 +142,8 @@ class HistoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun setLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

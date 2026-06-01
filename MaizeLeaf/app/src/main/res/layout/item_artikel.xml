@@ -71,7 +71,7 @@
                 android:layout_marginTop="6dp"
                 android:textSize="13sp"
                 android:text="@string/deskripsi_gambar"
-                android:textColor="#1B1B1B"
+                android:textColor="?attr/colorOnSurface"
                 android:maxLines="3"
                 android:ellipsize="end"
                 android:lineSpacingMultiplier="1.4" />
@@ -98,6 +98,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
                     android:textSize="12sp"
+                    android:textColor="@color/gray"
                     android:text="@string/referensi"
                     android:maxLines="1"
                     android:ellipsize="end" />

@@ -19,7 +19,7 @@
         android:id="@+id/bottom_background"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:background="@android:color/white"
+        android:background="?attr/colorSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -34,7 +34,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_take_picture"
         app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/yellow"
+        app:tint="?attr/colorPrimary"
         android:contentDescription="@string/galery" />
 
 
@@ -52,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="@id/bottom_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/yellow"
+        app:tint="?attr/colorPrimary"
         android:contentDescription="take_image"/>
 
 

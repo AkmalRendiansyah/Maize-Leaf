@@ -10,11 +10,17 @@ import com.akmal.maizeleaf.data.UserModel
 import com.akmal.maizeleaf.data.UserPreference
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.io.IOException
 
 class ArtikelViewModel(
     private val userPreference: UserPreference,
     private val apiService: ApiService
 ) : ViewModel() {
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> = _errorMessage
 
     private val _artikelList = MutableLiveData<List<GetArtikelResponseItem>>()
     val artikelList: LiveData<List<GetArtikelResponseItem>> = _artikelList
@@ -28,6 +34,7 @@ class ArtikelViewModel(
     }
 
     fun getArtikel(token: String) {
+        _isLoading.value=true
         viewModelScope.launch {
             try {
                 Log.d("ArtikelViewModel", "Fetching Posting with token: $token")
@@ -35,11 +42,20 @@ class ArtikelViewModel(
                 val response = apiService.getArtikel(bearerToken)
                 _artikelList.value = response.filterNotNull()
                 Log.d("ArtikelViewModel", "History fetched: ${response.size} items")
+            } catch (e: IOException) {
+                _errorMessage.value = "Tidak ada koneksi internet. Periksa jaringan Anda."
+                _artikelList.value = emptyList()
             } catch (e: Exception) {
                 Log.e("ArtikelViewModel", "Error fetching history", e)
+                    _errorMessage.value = "Terjadi kesalahan: ${e.message}"
                 _artikelList.value = emptyList()
+            }finally {
+                _isLoading.value=false
             }
         }
+    }
+    fun clearError() {
+        _errorMessage.value = null
     }
 
 //    fun deleteHistory(token: String, historyId: Int, onResult: (Boolean) -> Unit) {

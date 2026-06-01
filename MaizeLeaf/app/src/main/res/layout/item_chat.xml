@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/nama_pengguna"
-                    android:textColor="#1B1B1B"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/jadwal_posting"
-                    android:textColor="#888888"
+                    android:textColor="@color/gray"
                     android:textSize="11sp" />
 
             </LinearLayout>
@@ -62,7 +62,7 @@
             android:paddingTop="12dp"
             android:paddingBottom="8dp"
             android:text="@string/deskripsi_gambar"
-            android:textColor="#1B1B1B"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="13sp"
             android:lineSpacingMultiplier="1.4"
             android:maxLines="3"
@@ -95,12 +95,22 @@
 
             <TextView
                 android:id="@+id/tvJumlahKomentar"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginStart="6dp"
                 android:text="@string/_0_komentar"
                 android:textColor="#888888"
                 android:textSize="12sp" />
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/red"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/hapus_posting"
+                android:padding="4dp" />
 
         </LinearLayout>
 

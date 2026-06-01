@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -34,6 +35,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import java.io.IOException
 import java.net.URL
 
 class PreviewPostingActivity : AppCompatActivity() {
@@ -130,11 +132,17 @@ class PreviewPostingActivity : AppCompatActivity() {
         finish()
     }
 
+    private fun setLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.btnSave.isEnabled = !isLoading
+        binding.progressBar.isEnabled = !isLoading
+    }
+
     private fun uploadChat(deskripsi: String, imageUri: Uri) {
         binding.btnSave.isEnabled = false
         binding.btnBack.isEnabled = false
         binding.etDescription.isEnabled = false
-
+        setLoading(true)
         lifecycleScope.launch {
             try {
                 val userPref = UserPreference.getInstance(applicationContext.dataStore)
@@ -183,6 +191,13 @@ class PreviewPostingActivity : AppCompatActivity() {
                     binding.etDescription.isEnabled=true
                     navigateToMain(isSuccess = false)
                 }
+            }catch (e: IOException){
+                    Toast.makeText(this@PreviewPostingActivity,
+                    "Tidak ada koneksi internet. Periksa jaringan Anda.",
+                    Toast.LENGTH_SHORT).show()
+            }
+            finally {
+                setLoading(false)
             }
         }
     }

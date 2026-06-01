@@ -67,6 +67,17 @@ interface ApiService {
         @Header("Authorization") token: String
     ): List<GetAllPostingResponseItem>
 
+    @GET("myposting")
+    suspend fun getMyPosting(
+        @Header("Authorization") token: String
+    ): List<GetMyPostingResponseItem>
+
+    @DELETE("posting/{id}")
+    suspend fun deletePosting(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<Unit>
+
     @GET("komentar/{id}")
     suspend fun getKomentarById(
         @Header("Authorization") token: String,

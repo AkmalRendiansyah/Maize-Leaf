@@ -11,7 +11,7 @@ tools:context="MainActivity">
     android:id="@+id/fragmentContainerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="?attr/actionBarSize"/>
+    android:layout_marginBottom="56dp"/>
 
 <com.google.android.material.bottomappbar.BottomAppBar
     android:id="@+id/bottomBar"
@@ -19,6 +19,7 @@ tools:context="MainActivity">
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     app:contentInsetEnd="0dp"
+    android:background="#aacc00"
     app:contentInsetStart="0dp"
     app:fabAlignmentMode="center">
 
@@ -27,7 +28,11 @@ tools:context="MainActivity">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:elevation="0dp"
-        android:background="@color/white"
+        android:background="#aacc00"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:itemRippleColor="#FFDD00"
+
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
 
@@ -40,11 +45,12 @@ tools:context="MainActivity">
     app:maxImageSize="40dp"
     app:fabCustomSize="60dp"
     app:fabAlignmentMode="center"
-    android:backgroundTint="@color/yellow"
+    android:backgroundTint="#dddf00"
     android:tint="@color/white"
     android:layout_height="wrap_content"
     app:layout_anchor="@id/bottomBar"
-    android:contentDescription="scan"/>
+    android:contentDescription="@string/scan"
+    app:layout_anchorGravity="center|top"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

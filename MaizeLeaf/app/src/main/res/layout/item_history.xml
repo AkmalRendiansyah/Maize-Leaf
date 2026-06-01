@@ -52,6 +52,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:textSize="14sp"
+            android:textColor="@color/gray"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/nama_penyakit"
@@ -68,8 +69,8 @@
             android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/yellow"
-            android:contentDescription="Hapus History"/>
+            app:tint="@color/red"
+            android:contentDescription="@string/hapus_history"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
