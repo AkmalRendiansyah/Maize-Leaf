@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.MaizeLeaf" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#dddf00</item>
+        <item name="colorPrimary">#FFD449</item>
         <item name="colorPrimaryVariant">#D6C761</item>
         <item name="colorOnPrimary">@color/white</item>
 
@@ -14,8 +14,8 @@
 
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimary">#dddf00</item>
-        <item name="colorSecondary">#4CAF50</item>
+        <item name="colorPrimary">#FFD449</item>
+        <item name="colorSecondary">#548C2F</item>
         <item name="colorTertiary">#8D6E63</item>
         <item name="android:colorBackground">#FAFAF5</item>
         <item name="colorSurface">#FFFFFF</item>

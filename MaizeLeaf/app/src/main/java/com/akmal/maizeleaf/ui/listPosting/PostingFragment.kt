@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.akmal.maizeleaf.R
 import com.akmal.maizeleaf.api.ApiConfig
 import com.akmal.maizeleaf.api.ApiService
@@ -71,6 +72,7 @@ class PostingFragment : Fragment() {
         viewModel = PostingViewModel(userPreference, apiService)
 
         setupRecyclerView()
+        setupScrollListener()
         binding.tabFilter.addTab(binding.tabFilter.newTab().setText("Semua Postingan"))
         binding.tabFilter.addTab(binding.tabFilter.newTab().setText("Postingan Saya"))
 
@@ -125,10 +127,12 @@ class PostingFragment : Fragment() {
                 when (tab?.position) {
                     0 -> {
                         adapter.setShowDelete(false)
-                        renderAllPosting(viewModel.postingList.value)
+                        viewModel.resetPagination()                        // reset
+                        userToken?.let { viewModel.getPosting(it) }       // fetch ulang dari page 1
                     }
                     1 -> {
                         adapter.setShowDelete(true)
+                        viewModel.resetPagination()
                         userToken?.let { viewModel.getMyPosting(it) }
                     }
                 }
@@ -154,6 +158,26 @@ class PostingFragment : Fragment() {
 
 
     }
+
+    private fun setupScrollListener() {
+        binding.rvPosting.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy <= 0) return
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisible = layoutManager.findLastVisibleItemPosition()
+                val total = layoutManager.itemCount
+
+
+                if (lastVisible >= total - 2 && !viewModel.isLoadingMore) {
+                    when (binding.tabFilter.selectedTabPosition) {
+                        0 -> userToken?.let { viewModel.getPosting(it, loadMore = true) }
+                        1 -> userToken?.let { viewModel.getMyPosting(it, loadMore = true) }
+                    }
+                }
+            }
+        })
+    }
+
     private fun renderAllPosting(list: List<GetAllPostingResponseItem>?) {
         if (list.isNullOrEmpty()) showNoHistory()
         else {

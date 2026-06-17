@@ -4,8 +4,20 @@ import com.google.gson.annotations.SerializedName
 
 data class GetMyPostingResponse(
 
-	@field:SerializedName("GetMyPostingResponse")
-	val getMyPostingResponse: List<GetMyPostingResponseItem?>? = null
+	@field:SerializedName("data")
+	val data: List<GetMyPostingResponseItem?>? = null,
+
+	@field:SerializedName("has_next")
+	val hasNext: Boolean? = null,
+
+	@field:SerializedName("page")
+	val page: Int? = null,
+
+	@field:SerializedName("total_pages")
+	val totalPages: Int? = null,
+
+	@field:SerializedName("total_items")
+	val totalItems: Int? = null
 )
 
 data class GetMyPostingResponseItem(

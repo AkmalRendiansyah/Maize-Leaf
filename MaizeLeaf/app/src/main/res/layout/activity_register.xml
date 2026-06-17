@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:src="@drawable/logo_apk"
+        android:src="@drawable/maizeleaf_logo"
         android:contentDescription="@string/logo_aplikasi"
         app:layout_constraintBottom_toTopOf="@+id/guidelineHorizontal"
         app:layout_constraintEnd_toEndOf="parent"

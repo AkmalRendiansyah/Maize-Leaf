@@ -64,13 +64,17 @@ interface ApiService {
 
     @GET("posting")
     suspend fun getPosting(
-        @Header("Authorization") token: String
-    ): List<GetAllPostingResponseItem>
+        @Header("Authorization") token: String,
+        @Query("page") page: Int = 1,
+        @Query("per_page") perPage: Int = 5
+    ): GetSemuaPostingResponse
 
     @GET("myposting")
     suspend fun getMyPosting(
-        @Header("Authorization") token: String
-    ): List<GetMyPostingResponseItem>
+        @Header("Authorization") token: String,
+        @Query("page") page: Int = 1,
+        @Query("per_page") perPage: Int = 5
+    ): GetMyPostingResponse
 
     @DELETE("posting/{id}")
     suspend fun deletePosting(

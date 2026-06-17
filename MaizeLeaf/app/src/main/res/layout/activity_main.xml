@@ -28,10 +28,10 @@ tools:context="MainActivity">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:elevation="0dp"
-        android:background="#aacc00"
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemTextColor="@color/bottom_nav_color"
-        app:itemRippleColor="#FFDD00"
+        android:background="?attr/colorPrimary"
+        app:itemIconTint="?attr/colorSecondary"
+        app:itemTextColor="?attr/colorSecondary"
+        app:itemRippleColor="?attr/colorPrimary"
 
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />

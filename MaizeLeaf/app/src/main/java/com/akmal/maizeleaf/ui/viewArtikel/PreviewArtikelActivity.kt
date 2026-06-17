@@ -38,8 +38,8 @@ class PreviewArtikelActivity : AppCompatActivity() {
         binding.tvReferensi.text = referensi
         Glide.with(this)
             .load(gambar)
-            .placeholder(R.drawable.logo_apk)
-            .error(R.drawable.logo_apk)
+            .placeholder(R.drawable.image_not_found)
+            .error(R.drawable.image_not_found)
             .into(binding.ivGambar)
 
 

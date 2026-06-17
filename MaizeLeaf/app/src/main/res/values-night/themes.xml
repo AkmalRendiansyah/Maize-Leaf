@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.MaizeLeaf" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#dddf00</item>
+        <item name="colorPrimary">#FFD449</item>
         <item name="colorPrimaryVariant">#D6C761</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnSurface">#f1faee</item>
         <item name="colorSurface">#1B1B1B</item>
-        <item name="colorSecondary">#4CAF50</item>
+        <item name="colorSecondary">#548C2F</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

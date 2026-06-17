@@ -52,6 +52,7 @@ def register():
         username=username,
         email=email,
         password=generate_password_hash(password),
+        role_id=2,
         status=False
     )
     db.session.add(user)

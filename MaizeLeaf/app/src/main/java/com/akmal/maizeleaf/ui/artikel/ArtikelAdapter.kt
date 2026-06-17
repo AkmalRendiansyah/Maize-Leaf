@@ -36,8 +36,8 @@ class ArtikelAdapter(
             binding.tvReferensi.text = item.referensi
             Glide.with(binding.ivGambarArtikel.context)
                 .load(item.gambar)
-                .placeholder(R.drawable.logo_apk)
-                .error(R.drawable.logo_apk)
+                .placeholder(R.drawable.image_not_found)
+                .error(R.drawable.image_not_found)
                 .into(binding.ivGambarArtikel)
 
             binding.root.setOnClickListener {

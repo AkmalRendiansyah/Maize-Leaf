@@ -30,9 +30,9 @@ class HistoryAdapter(
             binding.namaPenyakit.text = item.penyakit
             binding.tvItemCreate.text = item.createdAt
             Glide.with(binding.photoUri.context)
-                .load(item.gambar)  // URL gambar dari response
-                .placeholder(R.drawable.logo_apk) // gambar sementara saat loading
-                .error(R.drawable.logo_apk) // gambar saat error
+                .load(item.gambar)
+                .placeholder(R.drawable.image_not_found)
+                .error(R.drawable.image_not_found)
                 .into(binding.photoUri)
             binding.root.setOnClickListener {
                 onHistoryClick(item)

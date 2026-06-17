@@ -35,10 +35,13 @@ def save_postchat(user_id):
 @posting_bp.route("/posting", methods=["GET"])
 @token_required
 def get_posting(user_id):
-    postchats = Posting.query.order_by(Posting.created_at.desc()).all()
+    page = request.args.get("page", 1, type=int)
+    per_page = request.args.get("per_page", 5, type=int)
 
+    pagination = Posting.query.order_by(Posting.created_at.desc()) \
+                              .paginate(page=page, per_page=per_page, error_out=False)
     results = []
-    for p in postchats:
+    for p in pagination.items:
         sum_komentar = Komentar.query.filter_by(id_posting=p.id).count()
         results.append({
             "id":              p.id,
@@ -49,15 +52,24 @@ def get_posting(user_id):
             "created_at":      format_tanggal(p.created_at)
         })
 
-    return jsonify(results)
+    return jsonify({
+        "data":        results,
+        "page":        pagination.page,
+        "total_pages": pagination.pages,
+        "total_items": pagination.total,
+        "has_next":    pagination.has_next
+    })
 
 @posting_bp.route("/myposting", methods=["GET"])
 @token_required
 def get_my_posting(user_id):
-    postchats = Posting.query.filter_by(id_user=user_id).order_by(Posting.created_at.desc()).all()
+    page = request.args.get("page", 1, type=int)
+    per_page = request.args.get("per_page", 5, type=int)
 
+    pagination = Posting.query.filter_by(id_user=user_id).order_by(Posting.created_at.desc()) \
+                              .paginate(page=page, per_page=per_page, error_out=False)
     results = []
-    for p in postchats:
+    for p in pagination.items:
         sum_komentar = Komentar.query.filter_by(id_posting=p.id).count()
         results.append({
             "id":              p.id,
@@ -68,7 +80,13 @@ def get_my_posting(user_id):
             "created_at":      format_tanggal(p.created_at)
         })
 
-    return jsonify(results)
+    return jsonify({
+        "data":        results,
+        "page":        pagination.page,
+        "total_pages": pagination.pages,
+        "total_items": pagination.total,
+        "has_next":    pagination.has_next
+    })
 
 
 

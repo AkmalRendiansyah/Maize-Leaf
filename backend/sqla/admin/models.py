@@ -9,12 +9,14 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False) 
     status = db.Column(db.Boolean, default=False, nullable=False)
+    role_id = db.Column(db.SmallInteger, db.ForeignKey('role.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    roles = db.relationship('Roles', backref='users', lazy=True)
     histories = db.relationship('History', backref='user', lazy=True)
     postings = db.relationship('Posting', backref='user', lazy=True)  
     komentars = db.relationship('Komentar', backref='user', lazy=True) 
     def __repr__(self):
-        return f"<User {self.username}>"
+        return f"{self.username}"
 
 
 class DeskripsiPenyakit(db.Model):
@@ -28,7 +30,7 @@ class DeskripsiPenyakit(db.Model):
     histories = db.relationship('History', backref='deskripsi_penyakit', lazy=True)
 
     def __repr__(self):
-        return f"<DeskripsiPenyakit {self.penyakit}>"
+        return f" {self.penyakit}"
 
 
 class History(db.Model):
@@ -56,7 +58,7 @@ class Posting(db.Model):
     komentars = db.relationship('Komentar', backref='posting',cascade="all, delete-orphan", lazy=True)
 
     def __repr__(self):
-        return f"<Posting {self.id}>"
+        return f" {self.id}"
 
 
 class Komentar(db.Model):
@@ -95,3 +97,14 @@ class OTP(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref='otp')
+
+
+class Roles(db.Model):
+    __tablename__ = "role"
+
+    id = db.Column(db.SmallInteger, primary_key=True, autoincrement=True)
+    role = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"{self.role}"

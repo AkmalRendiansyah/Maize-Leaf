@@ -6,6 +6,7 @@ import com.akmal.maizeleaf.api.ApiService
 import com.akmal.maizeleaf.api.GetAllPostingResponseItem
 import com.akmal.maizeleaf.api.GetHistoryResponseItem
 import com.akmal.maizeleaf.api.GetMyPostingResponseItem
+
 import com.akmal.maizeleaf.data.UserModel
 import com.akmal.maizeleaf.data.UserPreference
 import kotlinx.coroutines.launch
@@ -28,6 +29,17 @@ class PostingViewModel(
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
+    private var allPage          = 1
+    private var allIsLastPage    = false
+    private var allIsLoadingMore = false
+
+    private var myPage           = 1
+    private var myIsLastPage     = false
+    private var myIsLoadingMore  = false
+
+    val isLoadingMore: Boolean
+        get() = allIsLoadingMore || myIsLoadingMore
+
     fun getSession(): LiveData<UserModel> = userPreference.getSession().asLiveData()
 
     fun logout() {
@@ -36,46 +48,78 @@ class PostingViewModel(
         }
     }
 
-    fun getPosting(token: String) {
+
+    fun getPosting(token: String, loadMore: Boolean = false) {
+        if (allIsLoadingMore) return
+        if (loadMore && allIsLastPage) return
+        val page = if (loadMore) allPage + 1 else 1
+        if (!loadMore) {
+            allPage = 1
+            allIsLastPage = false
+        }
 
         viewModelScope.launch {
-            _isLoading.value=true
+            if (loadMore) allIsLoadingMore = true
+            else _isLoading.value = true
             try {
                 Log.d("PostingViewModel", "Fetching Posting with token: $token")
                 val bearerToken = "Bearer $token"
-                val response = apiService.getPosting(bearerToken)
-                _postingList.value = response.filterNotNull()
-                Log.d("PostingViewModel", "History fetched: ${response.size} items")
+                val response = apiService.getPosting(bearerToken, page )
+                val current  = if (loadMore) _postingList.value.orEmpty() else emptyList()
+                _postingList.value = current + (response.data?.filterNotNull() ?: emptyList())
+                allPage       = response.page ?: page
+                allIsLastPage = response.hasNext != true
+
             } catch (e: IOException) {
                 _errorMessage.value = "Tidak ada koneksi internet. Periksa jaringan Anda."
-                _postingList.value = emptyList()
+                if (!loadMore) _postingList.value = emptyList()
             }catch (e: Exception) {
                 _errorMessage.value = "Terjadi kesalahan: ${e.message}"
-                _postingList.value = emptyList()
+                if (!loadMore) _postingList.value = emptyList()
             }finally {
-                _isLoading.value=false
+                if (loadMore) allIsLoadingMore = false else _isLoading.value = false
             }
         }
     }
 
-    fun getMyPosting(token: String) {
+    fun getMyPosting(token: String, loadMore: Boolean = false) {
+        if (myIsLoadingMore) return
+        if (loadMore && myIsLastPage) return
+        val page = if (loadMore) myPage + 1 else 1
+        if (!loadMore) {
+            myPage = 1
+            myIsLastPage = false
+        }
+
         viewModelScope.launch {
-            _isLoading.value = true
+            if (loadMore) myIsLoadingMore = true else _isLoading.value = true
             try {
-                val response = apiService.getMyPosting("Bearer $token")
-                _myPostingList.value = response.filterNotNull()
+                Log.d("PostingViewModel", "Fetching Posting with token: $token")
+                val bearerToken = "Bearer $token"
+                val response = apiService.getMyPosting(bearerToken, page )
+                val current  = if (loadMore) _myPostingList.value.orEmpty() else emptyList()
+                _myPostingList.value = current + (response.data?.filterNotNull() ?: emptyList())
+                myPage       = response.page ?: page
+                myIsLastPage = response.hasNext != true
             } catch (e: IOException) {
-                _errorMessage.value = "Tidak ada koneksi internet."
-                _myPostingList.value = emptyList()
-            } catch (e: Exception) {
+                _errorMessage.value = "Tidak ada koneksi internet. Periksa jaringan Anda."
+                if (!loadMore) _myPostingList.value = emptyList()
+            }catch (e: Exception) {
                 _errorMessage.value = "Terjadi kesalahan: ${e.message}"
-                _myPostingList.value = emptyList()
-            } finally {
-                _isLoading.value = false
+                if (!loadMore) _myPostingList.value = emptyList()
+            }finally {
+                if (loadMore) allIsLoadingMore = false else _isLoading.value = false
             }
         }
     }
 
+    fun resetPagination() {
+        allPage = 1;  allIsLastPage = false;  allIsLoadingMore = false
+        myPage  = 1;  myIsLastPage  = false;  myIsLoadingMore  = false
+        _postingList.value   = emptyList()
+        _myPostingList.value = emptyList()
+
+    }
 
     fun clearError() {
         _errorMessage.value = null

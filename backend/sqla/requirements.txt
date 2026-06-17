@@ -1,11 +1,27 @@
-# Install Flask-Admin with required extras from the root of the repository
+# ─── Core Framework ───────────────────────────────────────────────────────────
 flask
 flask-admin
 flask-sqlalchemy
+flask-migrate
+flask-babel
+flask-mail
+
+# ─── Database ─────────────────────────────────────────────────────────────────
 pymysql
-Flask-SQLAlchemy
 Flask-JWT-Extended
 sqlalchemy-utils
-arrow
-email-validator
+
+# ─── Authentication & Security ────────────────────────────────────────────────
+PyJWT
 bcrypt
+werkzeug
+
+# ─── Forms & Validation ───────────────────────────────────────────────────────
+WTForms
+email-validator
+
+# ─── Utilities ────────────────────────────────────────────────────────────────
+python-dotenv
+arrow
+markupsafe
+Pillow

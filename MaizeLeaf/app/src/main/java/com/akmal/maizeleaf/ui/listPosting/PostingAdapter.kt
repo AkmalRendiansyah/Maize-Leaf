@@ -1,6 +1,7 @@
 package com.akmal.maizeleaf.ui.listPosting
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,10 +49,11 @@ class PostingAdapter(
             binding.tvTime.text = item.createdAt
             binding.tvDescription.text = item.deskripsi
             binding.tvJumlahKomentar.text = item.jumlahKomentar.toString()
+            Log.d("PostingBind", "gambar URL: ${item.gambar}")
             Glide.with(binding.ivGambarPosting.context)
                 .load(item.gambar)
-                .placeholder(R.drawable.logo_apk)
-                .error(R.drawable.logo_apk)
+                .placeholder(R.drawable.image_not_found)
+                .error(R.drawable.image_not_found)
                 .into(binding.ivGambarPosting)
             binding.root.setOnClickListener {
                 onPostingClick(item)
