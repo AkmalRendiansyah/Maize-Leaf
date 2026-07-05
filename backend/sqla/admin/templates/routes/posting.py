@@ -22,7 +22,7 @@ def save_postchat(user_id):
     db.session.commit()
 
     return jsonify({
-        "msg": "Postingan saved successfully",
+        "msg": "Postingan berhasil disimpan",
         "posting": {
             "id_user":    user_id,
             "deskripsi":  deskripsi,
@@ -95,7 +95,7 @@ def get_my_posting(user_id):
 def get_posting_by_id(user_id, id):
     posting = Posting.query.filter_by(id=id).first()
     if not posting:
-        return jsonify({"msg": "Post Chat not found or unauthorized"}), 404
+        return jsonify({"msg": "Postingan tidak ditemukan atau tidak punya hak akses"}), 404
 
     return jsonify({
         "id":         posting.id,
@@ -109,7 +109,7 @@ def get_posting_by_id(user_id, id):
 def delete_posting(user_id, id):
     posting = Posting.query.filter_by(id=id, id_user=user_id).first()
     if not posting:
-        return jsonify({"msg": "Posting not found or unauthorized"}), 404
+        return jsonify({"msg": "Postingan tidak ditemukan atau tidak punya hak akses"}), 404
 
     if posting.gambar:
         image_path = os.path.join(UPLOAD_FOLDER, posting.gambar)
@@ -119,7 +119,7 @@ def delete_posting(user_id, id):
     db.session.delete(posting)
     db.session.commit()
 
-    return jsonify({"msg": "Posting deleted successfully"}), 200
+    return jsonify({"msg": "Postingan berhasil dihapus"}), 200
 
 
 @posting_bp.route("/komentar", methods=["POST"])
@@ -146,7 +146,7 @@ def save_komentar(user_id):
     db.session.commit()
 
     return jsonify({
-        "msg": "Komentar saved successfully",
+        "msg": "Komentar berhasil disimpan",
         "komentar": {
             "id_user":    user_id,
             "id_posting": id_posting,

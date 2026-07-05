@@ -1,0 +1,135 @@
+package com.akmal.maizeleaf
+
+
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.akmal.maizeleaf.databinding.ActivityMainBinding
+import com.akmal.maizeleaf.ui.artikel.ArtikelFragment
+import com.akmal.maizeleaf.ui.camera.CameraActivity
+import com.akmal.maizeleaf.ui.history.HistoryFragment
+import com.akmal.maizeleaf.ui.listPosting.PostingFragment
+import com.akmal.maizeleaf.ui.profile.ProfileFragment
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                showToast(getString(R.string.permission_granted))
+            } else {
+                showToast(getString(R.string.permission_not_granted))
+            }
+        }
+
+    private fun allPermissionsGranted() =
+        ContextCompat.checkSelfPermission(
+            this,
+            REQUIRED_PERMISSION
+        ) == PackageManager.PERMISSION_GRANTED
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.fragmentContainerView) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(view.paddingLeft, systemBars.top, view.paddingRight, view.paddingBottom)
+            insets
+        }
+
+        if (!allPermissionsGranted()) {
+            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+        }
+        openFragment(PostingFragment())
+        binding.bottomNavigation.selectedItemId = R.id.navigation_posting
+        binding.fab.setOnClickListener { startCameraX() }
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_profile -> {
+                    openFragment(ProfileFragment())
+                    true
+                }
+
+                R.id.navigation_history -> {
+                    openFragment(HistoryFragment())
+                    true
+                }
+
+                R.id.navigation_posting -> {
+                    openFragment(PostingFragment())
+                    true
+                }
+
+                R.id.navigation_artikel -> {
+                    openFragment(ArtikelFragment())
+                    true
+                }
+
+
+
+                else -> false
+            }
+        }
+        if (intent.hasExtra("UPLOAD_STATUS")) {
+            val isSuccess = intent.getBooleanExtra("UPLOAD_STATUS", false)
+            val message = intent.getStringExtra("UPLOAD_MESSAGE") ?: ""
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
+        handleUploadStatus(intent)
+
+    }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleUploadStatus(intent)
+    }
+    private fun handleUploadStatus(intent: Intent) {
+        if (intent.hasExtra("UPLOAD_STATUS")) {
+            val isSuccess = intent.getBooleanExtra("UPLOAD_STATUS", false)
+            val message = intent.getStringExtra("UPLOAD_MESSAGE") ?: ""
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+            intent.removeExtra("UPLOAD_STATUS")
+            intent.removeExtra("UPLOAD_MESSAGE")
+        }
+    }
+    private fun openFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainerView, fragment)
+            .commit()
+    }
+    private fun startCameraX() {
+        val intent = Intent(this, CameraActivity::class.java)
+        startActivity(intent)
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+    }
+
+}

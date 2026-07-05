@@ -33,7 +33,7 @@ def save_history(user_id):
     db.session.commit()
 
     return jsonify({
-        "msg": "History saved successfully",
+        "msg": "History berhasil disimpan",
         "history": {
             "id_user":    user_id,
             "penyakit":   penyakit,
@@ -67,7 +67,7 @@ def get_user_history(user_id):
 def delete_history(user_id, id):
     history = History.query.filter_by(id=id, id_user=user_id).first()
     if not history:
-        return jsonify({"msg": "History not found or unauthorized"}), 404
+        return jsonify({"msg": "History tidak ditemukan atau tidak punya hak akses"}), 404
 
     # Hapus file gambar jika ada
     if history.gambar:
@@ -78,4 +78,4 @@ def delete_history(user_id, id):
     db.session.delete(history)
     db.session.commit()
 
-    return jsonify({"msg": "History deleted successfully"}), 200
+    return jsonify({"msg": "History berhasil dihapus"}), 200

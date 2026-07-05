@@ -83,3 +83,40 @@ def send_otp_email(username: str, email: str, kode_otp: str):
     except Exception as e:
         print(f"[EMAIL ERROR] Gagal kirim OTP ke {email}: {e}")
         return False
+
+
+def send_forgot_password_otp_email(username: str, email: str, kode_otp: str):
+    """Kirim kode OTP reset password ke email user"""
+    try:
+        msg = Message(
+            subject="Reset Password - Maize Leaf App",
+            recipients=[email]
+        )
+        msg.html = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 24px;
+                    border: 1px solid #e0e0e0; border-radius: 8px;">
+            <h2 style="color: #e65100;">Reset Password, {username}!</h2>
+            <p>Kami menerima permintaan untuk mereset password akun kamu di <strong>Maize Leaf App</strong>.</p>
+            <p>Gunakan kode OTP berikut untuk melanjutkan proses reset password:</p>
+            <div style="text-align: center; margin: 24px 0;">
+                <span style="font-size: 36px; font-weight: bold; letter-spacing: 10px;
+                             color: #bf360c; background: #fbe9e7; padding: 12px 24px;
+                             border-radius: 8px; display: inline-block;">
+                    {kode_otp}
+                </span>
+            </div>
+            <p style="color: #757575;">Kode ini berlaku selama <strong>5 menit</strong>.</p>
+            <p style="color: #e65100; font-weight: bold;">
+                Jika kamu tidak meminta reset password, abaikan email ini dan pastikan akun kamu aman.
+            </p>
+            <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;">
+            <p style="color: #757575; font-size: 12px;">
+                Email ini dikirim secara otomatis, mohon jangan membalas email ini.
+            </p>
+        </div>
+        """
+        mail.send(msg)
+        return True
+    except Exception as e:
+        print(f"[EMAIL ERROR] Gagal kirim OTP reset password ke {email}: {e}")
+        return False

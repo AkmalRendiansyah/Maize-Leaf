@@ -1,0 +1,21 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MaizeLeaf" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#FFD449</item>
+        <item name="colorSecondary">#548C2F</item>
+        <item name="colorTertiary">#8D6E63</item>
+        <item name="android:colorBackground">#FAFAF5</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnBackground">#1B1B1B</item>
+        <item name="colorOnSurface">#1B1B1B</item>
+        <item name="colorError">#B00020</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="colorSecondaryContainer">#dddf00</item>
+    </style>
+
+    <style name="Theme.MaizeLeaf" parent="Base.Theme.MaizeLeaf" />
+</resources>
